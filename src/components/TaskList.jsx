@@ -1,11 +1,13 @@
-import React from 'react';
+import React from "react";
+import TaskForm from "./TaskForm";
 
 const TaskList = () => {
-    return (
-        <div>
-            <h1>TaskList</h1>
-        </div>
-    );
+  return (
+    <div>
+      <h2>Task Manager</h2>
+      <TaskForm />
+    </div>
+  );
 };
 
 export default TaskList;
