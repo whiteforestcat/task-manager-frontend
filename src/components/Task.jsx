@@ -60,7 +60,7 @@ const Task = () => {
                   <div className={`task-icons flex justify-end`}>
                     <FaCheckDouble color="green" />
                     <FaEdit color="purple" />
-                    <FaRegTrashAlt color="red" />
+                    <FaRegTrashAlt color="red" onClick={() => deleteTask(task._id)}/>
                   </div>
                 </div>
               );
