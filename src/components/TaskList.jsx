@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Task from "./Task";
 import TaskForm from "./TaskForm";
 import axios from "axios";
+import { URL } from "../App";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 const TaskList = () => {
   const [formData, setFormData] = useState({
@@ -36,8 +38,9 @@ const TaskList = () => {
         // });
         // const data = await res.json();
         // console.log(data);
-      await axios.post("http://127.0.0.1:5000/api/tasks", formData);
+      await axios.post(`${URL}/api/tasks`, formData);
       setFormData({ ...formData, name: "" });
+      toast.success("Task added successfully")
     } catch (error) {
       toast.error(error.message);
     }
