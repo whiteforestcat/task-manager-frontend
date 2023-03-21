@@ -3,6 +3,7 @@ import Task from "./Task";
 import TaskForm from "./TaskForm";
 import axios from "axios";
 import { URL } from "../App";
+import loadingSpinner from "../assets/loader.gif";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,23 +25,23 @@ const TaskList = () => {
     setFormData({ ...formData, name: e.target.value });
   };
 
-  const getTasks = async () => {
-    setIsLoading(true); // loadspinner
-    try {
-      const res = await axios.get(`${URL}/api/tasks`);
-      console.log(res);
-      setTasks(res.data);
-      setIsLoading(false);
-    } catch (error) {
-      toast.error(error.message);
-      console.log(error.message);
-      setIsLoading(false);
-    }
-  };
+//   const getTasks = async () => {
+//     setIsLoading(true); // loadspinner
+//     try {
+//       const res = await axios.get(`${URL}/api/tasks`);
+//       console.log(res);
+//       setTasks(res.data);
+//       setIsLoading(false);
+//     } catch (error) {
+//       toast.error(error.message);
+//       console.log(error.message);
+//       setIsLoading(false);
+//     }
+//   };
 
-  useEffect(() => {
-    getTasks();
-  }, []);
+//   useEffect(() => {
+//     getTasks();
+//   }, []);
 
   const createTaskForm = async (e) => {
     e.preventDefault();
@@ -86,6 +87,20 @@ const TaskList = () => {
       </div>
       <hr />
       {/* <hr /> creates a line */}
+      {/* {isLoading && (
+        <div className="--flex-center">
+          <img src={loadingSpinner} alt="Loading" />
+        </div>
+      )}
+      {!isLoading && tasks.length === 0 ? (
+        <p className="--py">No task found.</p>
+      ) : (
+        <div>
+          {tasks.map((task, index) => {
+            return <Task />;
+          })}
+        </div>
+      )} */}
       <Task />
     </div>
   );
