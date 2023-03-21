@@ -7,7 +7,7 @@ import { URL } from "../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Task = () => {
+const Task = (props) => {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +40,15 @@ const Task = () => {
     }
   };
 
+  const getSingleTask = async (task) => {
+    props.setFormData({
+      name: task.name,
+      completed: false,
+    });
+    props.setIsEditting(true);
+    props.setTaskID(task._id);
+  };
+
   return (
     <div className="task">
       <div>
@@ -59,8 +68,14 @@ const Task = () => {
                   {task.name}
                   <div className={`task-icons flex justify-end`}>
                     <FaCheckDouble color="green" />
-                    <FaEdit color="purple" />
-                    <FaRegTrashAlt color="red" onClick={() => deleteTask(task._id)}/>
+                    <FaEdit
+                      color="purple"
+                      onClick={() => getSingleTask(task)}
+                    />
+                    <FaRegTrashAlt
+                      color="red"
+                      onClick={() => deleteTask(task._id)}
+                    />
                   </div>
                 </div>
               );

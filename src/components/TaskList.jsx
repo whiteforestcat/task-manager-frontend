@@ -8,14 +8,14 @@ import loadingSpinner from "../assets/loader.gif";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const TaskList = () => {
-  const [tasks, setTasks] = useState([]);
-  const [completedTasks, setCompletedTasks] = useState([]);
+const TaskList = (props) => {
   const [formData, setFormData] = useState({
     name: "",
     completed: false,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditting, setIsEditting] = useState(false);
+  const [taskID, setTaskID] = useState("");
 
   // destructure out name from formData
   const { name } = formData;
@@ -24,24 +24,6 @@ const TaskList = () => {
     // setFormData({ ...formData, name: e.target.name });
     setFormData({ ...formData, name: e.target.value });
   };
-
-//   const getTasks = async () => {
-//     setIsLoading(true); // loadspinner
-//     try {
-//       const res = await axios.get(`${URL}/api/tasks`);
-//       console.log(res);
-//       setTasks(res.data);
-//       setIsLoading(false);
-//     } catch (error) {
-//       toast.error(error.message);
-//       console.log(error.message);
-//       setIsLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     getTasks();
-//   }, []);
 
   const createTaskForm = async (e) => {
     e.preventDefault();
@@ -67,6 +49,47 @@ const TaskList = () => {
     }
   };
 
+  const getTasks = async () => {
+    setIsLoading(true); // loadspinner
+    try {
+      const res = await axios.get(`${URL}/api/tasks`);
+      console.log(res);
+      //   setTasks(res.data);
+      setIsLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error.message);
+      setIsLoading(false);
+    }
+  };
+
+  //   const getSingleTask = async (task) => {
+  //     props.setFormData({
+  //       name: task.name,
+  //       completed: false,
+  //     });
+  //   };
+
+  const updateTask = async (e) => {
+    e.preventDefault();
+    if (name === "") {
+      toast.error("Input field cannot be empty.");
+    }
+    try {
+      await axios.patch(`${URL}/api/tasks/${taskID}`, formData);
+      setFormData({ ...formData, name: "" });
+      setIsEditting(false);
+      //   getTasks();
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error.message);
+    }
+  };
+
+//   useEffect(() => {
+//     getTasks();
+//   }, [formData]);
+
   return (
     <div>
       <ToastContainer />
@@ -76,6 +99,8 @@ const TaskList = () => {
         formData={formData}
         handleInputChange={handleInputChange}
         createTaskForm={createTaskForm}
+        isEditting={isEditting}
+        updateTask={updateTask}
       />
       <div className="--flex-between --pb">
         <p>
@@ -101,7 +126,13 @@ const TaskList = () => {
           })}
         </div>
       )} */}
-      <Task />
+      <Task
+        formData={formData}
+        setFormData={setFormData}
+        setIsEditting={setIsEditting}
+        setTaskID={setTaskID}
+        taskID={setTaskID}
+      />
     </div>
   );
 };
