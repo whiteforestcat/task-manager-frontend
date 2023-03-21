@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Task from "./Task";
 import TaskForm from "./TaskForm";
 import axios from "axios";
@@ -7,12 +7,14 @@ import { URL } from "../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const TaskList = () => {
+  const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     completed: false,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // destructure out name from formData
   const { name } = formData;
@@ -22,6 +24,24 @@ const TaskList = () => {
     setFormData({ ...formData, name: e.target.value });
   };
 
+  const getTasks = async () => {
+    setIsLoading(true); // loadspinner
+    try {
+      const res = await axios.get(`${URL}/api/tasks`);
+      console.log(res);
+      setTasks(res.data);
+      setIsLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error.message);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+
   const createTaskForm = async (e) => {
     e.preventDefault();
     console.log(formData);
@@ -29,18 +49,18 @@ const TaskList = () => {
       return toast.error("Input field cannot be empty");
     }
     try {
-        // const res = await fetch("http://127.0.0.1:5000/api/tasks", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-type": "application/json",
-        //   },
-        //   body: JSON.stringify(formData),
-        // });
-        // const data = await res.json();
-        // console.log(data);
+      // const res = await fetch("http://127.0.0.1:5000/api/tasks", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-type": "application/json",
+      //   },
+      //   body: JSON.stringify(formData),
+      // });
+      // const data = await res.json();
+      // console.log(data);
       await axios.post(`${URL}/api/tasks`, formData);
       setFormData({ ...formData, name: "" });
-      toast.success("Task added successfully")
+      toast.success("Task added successfully");
     } catch (error) {
       toast.error(error.message);
     }
